@@ -1,8 +1,7 @@
-package com.naher_farhsa.ems.controller;
+package com.naher_farhsa.ems.Controller;
 
 
 import com.naher_farhsa.ems.Entity.HallAllocation;
-import com.naher_farhsa.ems.Service.HallAllocationService;
 import com.naher_farhsa.ems.Service.HallAllocationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

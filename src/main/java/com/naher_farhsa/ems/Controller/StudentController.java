@@ -1,7 +1,6 @@
-package com.naher_farhsa.ems.controller;
+package com.naher_farhsa.ems.Controller;
 
 import com.naher_farhsa.ems.Entity.Student;
-import com.naher_farhsa.ems.Service.StudentService;
 import com.naher_farhsa.ems.Service.StudentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
