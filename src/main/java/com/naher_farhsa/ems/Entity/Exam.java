@@ -19,12 +19,14 @@ public class Exam {
     @Enumerated(EnumType.STRING)
     private Course courseId;
 
+    @Column(nullable = false,unique = true)
     @Enumerated(EnumType.STRING)
     private Hall hallId;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique =true)
     private LocalDate date;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Shift shift;
 }

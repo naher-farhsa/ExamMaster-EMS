@@ -1,5 +1,5 @@
 package com.naher_farhsa.ems.Entity;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naher_farhsa.ems.Enum.Course;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,8 +23,15 @@ public class Student {
     @OneToOne
     private User user;
 
-    @ElementCollection(fetch = FetchType.LAZY)  // Stores the list of courses in JSON format
-    @Column(columnDefinition = "json", name = "enrolled_courses")  // Store as JSON in the database
-    private List<String> enrolledCourses;
+    @ElementCollection(targetClass = Course.class, fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(
+            name = "student_enrolled_courses",
+            joinColumns = @JoinColumn(name = "student_id")
+    )
+    @Column(name = "course")
+    private List<Course> enrolledCourses;
+
+
 }
 

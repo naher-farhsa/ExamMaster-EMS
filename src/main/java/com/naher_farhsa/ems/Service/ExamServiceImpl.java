@@ -20,10 +20,10 @@ public class ExamServiceImpl implements ExamService {
     private HallAllocationServiceImpl hallAllocationServiceImpl;
 
     @Transactional
-    public Exam addExam(Exam exam) {
+    public void addExam(Exam exam) {
         boolean isValidCourse = false;
         for (Course c : Course.values()) {
-            if (c.name().equals(exam.getCourseId().name())) {
+            if (c.name().equals(exam.getCourseId().getCourseCode())) {
                 isValidCourse = true;
                 break;
             }
@@ -45,6 +45,5 @@ public class ExamServiceImpl implements ExamService {
 
         Exam addedExam = examRepository.save(exam);
         hallAllocationServiceImpl.addHallAllocationForExam(addedExam);
-        return addedExam;
     }
 }
