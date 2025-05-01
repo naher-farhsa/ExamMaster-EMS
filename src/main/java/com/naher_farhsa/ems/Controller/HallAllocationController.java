@@ -19,9 +19,9 @@ public class HallAllocationController {
 
 
 
- @GetMapping("/exam/{examId}")
-    public List<HallAllocationDTO> getHallAllocationByExam(@PathVariable String examId) {
-        return hallAllocationServiceImpl.getHallAllocationByExam(examId);
+ @GetMapping("/examCourse/{examCourseId}")
+    public List<HallAllocationDTO> getHallAllocationByExamCourse(@PathVariable String examCourseId) {
+        return hallAllocationServiceImpl.getHallAllocationByExamCourse(examCourseId);
     }
 
    /*

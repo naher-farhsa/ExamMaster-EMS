@@ -4,6 +4,7 @@ import com.naher_farhsa.ems.DTO.HallAllocationDTO;
 import com.naher_farhsa.ems.Entity.Exam;
 import com.naher_farhsa.ems.Entity.HallAllocation;
 import com.naher_farhsa.ems.Entity.Student;
+import com.naher_farhsa.ems.Enum.Course;
 import com.naher_farhsa.ems.Enum.Hall;
 import com.naher_farhsa.ems.Repository.HallAllocationRepository;
 import com.naher_farhsa.ems.Repository.StudentRepository;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class HallAllocationServiceImpl implements HallAllocationService {
 
@@ -26,6 +30,8 @@ public class HallAllocationServiceImpl implements HallAllocationService {
     private static final int ROWS = 10;
     private static final int COLS = 10;
 
+
+    @Transactional
     public void addHallAllocationForExam(Exam exam) {
         List<Student> students = studentRepository.findByEnrolledCourses(exam.getCourseId());
         assignSets(exam, students, false); // false = skip already allocated students
@@ -33,7 +39,7 @@ public class HallAllocationServiceImpl implements HallAllocationService {
 
     @Transactional
     public void updateHallAllocationForExam(Exam exam, List<Student> students) {
-        hallAllocationRepository.deleteByExam_ExamId(exam.getExamId());
+        hallAllocationRepository.deleteByExam_ExamId(exam.getExamId()); // delete previous HallAllocation
         assignSets(exam, students, true); // true = assign all students afresh
     }
 
@@ -64,8 +70,22 @@ public class HallAllocationServiceImpl implements HallAllocationService {
         }
     }
 
-    public List<HallAllocationDTO> getHallAllocationByExam(String examId) {
-        List<HallAllocation> hallAllocations = hallAllocationRepository.findByExam_ExamId(examId);
+    @Transactional
+    public void deleteByExamId(String examId) {
+        hallAllocationRepository.deleteByExam_ExamId(examId);
+    }
+
+
+    public List<HallAllocationDTO> getHallAllocationByExamCourse(String examCourseId) {
+        // Convert string to Course enum (with validation)
+        Course course;
+        try {
+            course = Course.valueOf(examCourseId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid course code: " + examCourseId);
+        }
+
+        List<HallAllocation> hallAllocations = hallAllocationRepository.findByExam_CourseId(course);
         List<HallAllocationDTO> hallAllocationDTOList = new ArrayList<>();
 
         for (HallAllocation alloc : hallAllocations) {
@@ -88,4 +108,6 @@ public class HallAllocationServiceImpl implements HallAllocationService {
 
         return hallAllocationDTOList;
     }
+
+
 }
