@@ -26,9 +26,15 @@ public class JwtTokenStore {
     }
 
 
-    public boolean removeToken(String username) {
-        return tokenStore.remove(username) != null;
+    public boolean removeToken(String username, String token) {
+        String storedToken = tokenStore.get(username);
+        if (storedToken != null && storedToken.equals(token)) {
+            tokenStore.remove(username);
+            return true;
+        }
+        return false;
     }
+
 
 }
 

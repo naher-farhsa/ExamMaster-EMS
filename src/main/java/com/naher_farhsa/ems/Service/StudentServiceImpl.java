@@ -39,7 +39,6 @@ public class StudentServiceImpl implements StudentService {
         for (Exam exam : existingExams) {
             hallAllocationServiceImpl.addHallAllocationForExam(exam);
         }
-
     }
 
 

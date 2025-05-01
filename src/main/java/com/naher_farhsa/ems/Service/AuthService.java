@@ -42,7 +42,7 @@ public class AuthService {
             if (!jwtUtil.isTokenExpired(existingToken)) {
                 throw new RuntimeException("User already logged in. Please logout first.");
             } else {
-                jwtTokenStore.removeToken(loginDTO.getUserName()); // clean expired token
+                jwtTokenStore.removeToken(loginDTO.getUserName(),existingToken); // clean expired token
             }
         }
 
@@ -56,6 +56,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(loginDTO.getUserName());
         jwtTokenStore.storeToken(loginDTO.getUserName(), token);
         User user = userRepository.findByUserName(loginDTO.getUserName());
+
         return new JwtResponse(token, user.getUserRole());
     }
 
@@ -63,10 +64,13 @@ public class AuthService {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             String userName = jwtUtil.extractUserName(token);
-            boolean removedToken = jwtTokenStore.removeToken(userName);
-            if(removedToken)
-            return "Logged out successfully";
+            boolean removed = jwtTokenStore.removeToken(userName, token);
+            if (removed)
+                return "Logged out successfully";
+            else
+                return "Invalid or already expired token";
         }
-        return "No token found to logout";
+            return "No token found to logout";
     }
 }
+
